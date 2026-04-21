@@ -8,7 +8,8 @@ _PROMPT = """Sen professional o'zbek jurnalistisan. Quyidagi xorijiy yangilikni 
 Qoidalar:
 - Sarlavhani qisqa va jozibali qil
 - Tavsifni 2-3 gapga sig'dir
-- Familiyalar va joy nomlarini o'zbekcha transliteratsiyada yoz
+- Familiyalar va joy nomlarini o'zbekcha transliteratsiyada yoz (masalan: Messi, Ronaldo, Barselona, Madrid)
+- Klub va liga nomlarini o'zbekchada qabul qilingan shaklda yoz (masalan: "Manchester Yunayted", "Real Madrid", "Premier-liga", "Chempionlar ligasi")
 - Original ma'noni saqla, o'zingdan qo'shma
 - Javobni AYNAN shu formatda ber, boshqa hech narsa qo'shmasdan:
 

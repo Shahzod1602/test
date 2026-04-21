@@ -12,3 +12,16 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  newsai-football:
+    image: ghcr.io/shahzod1602/news:latest
+    container_name: newsai-football
+    restart: unless-stopped
+    env_file: .env.football
+    volumes:
+      - ./data-football:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

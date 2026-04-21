@@ -52,6 +52,18 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy docker-compose.yml to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          source: docker-compose.yml
+          target: /opt/newsai/
+
       - name: SSH deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -63,5 +75,5 @@ jobs:
             set -e
             cd /opt/newsai
             docker compose pull
-            docker compose up -d
+            docker compose up -d --remove-orphans
             docker image prune -f
