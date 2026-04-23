@@ -12,12 +12,13 @@ def _escape(s: str) -> str:
     return html.escape(s or "", quote=False)
 
 
-def _build(title: str, summary: str, source: str, url: str, tag: str, limit: int) -> str:
+def _build(title: str, summary: str, source: str, url: str, tag: str, limit: int, channel: str = "") -> str:
     head = f"<b>{_escape(title)}</b>"
+    mention = f"\n📢 {channel}" if channel else ""
     footer = (
         f"\n\n🔗 Manba: {_escape(source)}\n"
         f"👉 <a href=\"{_escape(url)}\">To'liq o'qish</a>\n\n"
-        f"{tag} #yangilik"
+        f"{tag} #yangilik{mention}"
     )
     body = _escape(summary)
     text = f"{head}\n\n{body}{footer}"
@@ -43,7 +44,7 @@ def send(
 ) -> bool:
     has_image = bool(article.image_url)
     limit = CAPTION_LIMIT if has_image else TEXT_LIMIT
-    text = _build(title, summary, article.source, article.url, article.tag, limit)
+    text = _build(title, summary, article.source, article.url, article.tag, limit, channel)
 
     if dry_run:
         print("--- DRY RUN ---")
@@ -70,7 +71,7 @@ def send(
         except Exception as e:
             print(f"  [photo exception: {e}]")
 
-    text = _build(title, summary, article.source, article.url, article.tag, TEXT_LIMIT)
+    text = _build(title, summary, article.source, article.url, article.tag, TEXT_LIMIT, channel)
     r = httpx.post(
         TG_API.format(token=token, method="sendMessage"),
         data={
