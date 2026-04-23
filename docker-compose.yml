@@ -1,6 +1,6 @@
 services:
   newsai:
-    image: ghcr.io/shahzod1602/news:latest
+    image: ghcr.io/shahzod1602/test:latest
     build: .
     container_name: newsai
     restart: unless-stopped
@@ -14,7 +14,7 @@ services:
         max-file: "3"
 
   newsai-football:
-    image: ghcr.io/shahzod1602/news:latest
+    image: ghcr.io/shahzod1602/test:latest
     container_name: newsai-football
     restart: unless-stopped
     env_file: .env.football
