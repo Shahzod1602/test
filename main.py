@@ -17,8 +17,6 @@ FETCH_POOL = 10  # rotation rejimida har manbadan tekshiriladigan oxirgi yangili
 def _ensure_keys() -> None:
     if not config.TELEGRAM_BOT_TOKEN:
         sys.exit("TELEGRAM_BOT_TOKEN .env da ko'rsatilmagan")
-    if not config.GEMINI_API_KEY:
-        sys.exit("GEMINI_API_KEY .env da ko'rsatilmagan")
 
 
 def _send_one(article: fetcher.Article, dry_run: bool) -> bool:
@@ -59,7 +57,7 @@ def _pick_unsent(source_tuple, pool: int) -> fetcher.Article | None:
 
 def run_once(dry_run: bool = False, max_per_source: int | None = None) -> None:
     _ensure_keys()
-    translator.init(config.GEMINI_API_KEY)
+    translator.init(config.VERTEX_PROJECT, config.VERTEX_LOCATION)
     db.init(config.DB_PATH)
 
     limit = max_per_source or config.MAX_ARTICLES_PER_SOURCE
@@ -90,7 +88,7 @@ def run_once(dry_run: bool = False, max_per_source: int | None = None) -> None:
 
 def rotation_tick(dry_run: bool = False) -> bool:
     _ensure_keys()
-    translator.init(config.GEMINI_API_KEY)
+    translator.init(config.VERTEX_PROJECT, config.VERTEX_LOCATION)
     db.init(config.DB_PATH)
 
     last_idx_raw = db.get_state(config.DB_PATH, LAST_INDEX_KEY)

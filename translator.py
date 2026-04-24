@@ -1,6 +1,7 @@
-from google import genai
+import vertexai
+from vertexai.generative_models import GenerativeModel
 
-_client: genai.Client | None = None
+_model: GenerativeModel | None = None
 _MODEL = "gemini-2.5-flash"
 
 _PROMPT = """Sen professional o'zbek jurnalistisan. Quyidagi xorijiy yangilikni o'zbek tiliga (lotin yozuvi) tabiiy, jurnalistik uslubda tarjima qil.
@@ -23,20 +24,21 @@ Original tavsif: {summary}
 """
 
 
-def init(api_key: str) -> None:
-    global _client
-    _client = genai.Client(api_key=api_key)
+def init(project: str, location: str = "us-central1") -> None:
+    global _model
+    vertexai.init(project=project, location=location)
+    _model = GenerativeModel(_MODEL)
 
 
 def translate_to_uzbek(title: str, summary: str, src_lang: str) -> tuple[str, str]:
     if src_lang == "uz":
         return title, summary
 
-    assert _client is not None, "translator.init() chaqirilmagan"
+    assert _model is not None, "translator.init() chaqirilmagan"
 
     prompt = _PROMPT.format(lang=src_lang, title=title, summary=summary or "(tavsif yo'q)")
 
-    resp = _client.models.generate_content(model=_MODEL, contents=prompt)
+    resp = _model.generate_content(prompt)
     text = (resp.text or "").strip()
 
     out_title = title
